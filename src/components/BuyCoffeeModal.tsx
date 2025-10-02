@@ -66,14 +66,18 @@ export const BuyCoffeeModal = ({ isOpen, onClose, postId }: BuyCoffeeModalProps)
     setStatus('pending');
 
     try {
+      console.log('Sending STK Push request:', { postId, phone: formattedPhone, amount: finalAmount });
+      
       const { data } = await apiClient.post('/payments/stkpush', {
         postId,
         phone: formattedPhone,
         amount: finalAmount,
       });
 
+      console.log('STK Push response:', data);
       setCheckoutRequestId(data.checkoutRequestId);
       toast.success('STK push sent! Check your phone to complete payment.');
+      console.log('STK Push sent successfully to phone:', formattedPhone, 'Amount:', finalAmount, 'Checkout ID:', data.checkoutRequestId);
       
       // Start polling for status
       pollPaymentStatus(data.checkoutRequestId);
@@ -86,14 +90,16 @@ export const BuyCoffeeModal = ({ isOpen, onClose, postId }: BuyCoffeeModalProps)
   };
 
   const pollPaymentStatus = async (reqId: string) => {
-    const maxAttempts = 30; // Poll for up to 1 minute
+    const maxAttempts = 150; // Poll for up to 5 minutes (150 * 2 seconds)
     let attempts = 0;
+    let failedAttempts = 0; // Track consecutive failed attempts
 
     const poll = setInterval(async () => {
       attempts++;
       
       try {
         const { data } = await apiClient.get(`/payments/${reqId}/status`);
+        console.log(`Payment status check (attempt ${attempts}):`, data);
         
         if (data.status === 'SUCCESS') {
           setStatus('success');
@@ -107,22 +113,59 @@ export const BuyCoffeeModal = ({ isOpen, onClose, postId }: BuyCoffeeModalProps)
             resetModal();
           }, 2000);
         } else if (data.status === 'FAILED') {
+          // Only fail immediately if it's a clear error (not user cancellation)
+          const errorCode = data.rawResponse?.resultCode;
+          
+          if (errorCode === 1032) {
+            // User cancelled - this is expected, don't treat as error
+            setStatus('failed');
+            setLoading(false);
+            clearInterval(poll);
+            toast.error('Payment was cancelled. Please try again.');
+          } else if (errorCode === 2029) {
+            // Phone/account issue - fail immediately
+            setStatus('failed');
+            setLoading(false);
+            clearInterval(poll);
+            toast.error('Phone number not registered with M-Pesa or account issue. Please check your M-Pesa registration.');
+          } else if (errorCode === 2001) {
+            // Insufficient balance - fail immediately
+            setStatus('failed');
+            setLoading(false);
+            clearInterval(poll);
+            toast.error('Insufficient balance. Please top up your M-Pesa account.');
+          } else {
+            // Other errors - wait a bit longer before failing
+            failedAttempts++;
+            if (failedAttempts >= 3) {
+              setStatus('failed');
+              setLoading(false);
+              clearInterval(poll);
+              toast.error(`Payment failed: ${data.rawResponse?.resultDescription || 'Unknown error'}`);
+            }
+          }
+        } else if (data.status === 'PENDING') {
+          // Reset failed attempts counter when status is pending
+          failedAttempts = 0;
+          console.log(`Payment still pending... (attempt ${attempts}/${maxAttempts})`);
+        }
+        
+        // Timeout after max attempts
+        if (attempts >= maxAttempts) {
           setStatus('failed');
           setLoading(false);
           clearInterval(poll);
-          toast.error('Payment failed. Please try again.');
-        } else if (attempts >= maxAttempts) {
-          setStatus('failed');
-          setLoading(false);
-          clearInterval(poll);
-          toast.error('Payment timeout. Please check your M-Pesa messages.');
+          toast.error('Payment timeout. Please check your M-Pesa messages or try again.');
         }
       } catch (error) {
         console.error('Status check error:', error);
-        if (attempts >= maxAttempts) {
+        failedAttempts++;
+        
+        if (failedAttempts >= 5 || attempts >= maxAttempts) {
           clearInterval(poll);
           setStatus('failed');
           setLoading(false);
+          toast.error('Unable to check payment status. Please try again.');
         }
       }
     }, 2000); // Check every 2 seconds
@@ -243,8 +286,16 @@ export const BuyCoffeeModal = ({ isOpen, onClose, postId }: BuyCoffeeModalProps)
               <div className="text-center">
                 <p className="font-medium">Waiting for payment...</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Check your phone and enter M-Pesa PIN
+                  Check your phone for M-Pesa STK Push notification
                 </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  If you don't receive the prompt, please check:
+                </p>
+                <ul className="text-xs text-muted-foreground mt-1 text-left">
+                  <li>• Phone number is registered with M-Pesa</li>
+                  <li>• You have sufficient balance</li>
+                  <li>• M-Pesa service is active</li>
+                </ul>
               </div>
             </motion.div>
           )}

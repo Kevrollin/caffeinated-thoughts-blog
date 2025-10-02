@@ -9,8 +9,8 @@ interface PostCardProps {
     id: string;
     title: string;
     slug: string;
-    excerpt: string;
-    featuredImageUrl?: string;
+    excerpt: string | null;
+    featuredImageUrl?: string | null;
     tags: string[];
     category: string;
     publishedAt: string;
@@ -26,7 +26,8 @@ export const PostCard = ({ post }: PostCardProps) => {
     });
   };
 
-  const calculateReadTime = (excerpt: string) => {
+  const calculateReadTime = (excerpt: string | null | undefined) => {
+    if (!excerpt) return '1 min read';
     const wordsPerMinute = 200;
     const wordCount = excerpt.split(' ').length;
     const minutes = Math.ceil(wordCount / wordsPerMinute);
@@ -68,9 +69,11 @@ export const PostCard = ({ post }: PostCardProps) => {
               {post.title}
             </h3>
             
-            <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
-              {post.excerpt}
-            </p>
+            {post.excerpt && (
+              <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
+                {post.excerpt}
+              </p>
+            )}
           </CardContent>
 
           <CardFooter className="px-6 pb-6 pt-0">

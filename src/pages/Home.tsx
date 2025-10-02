@@ -10,8 +10,8 @@ interface Post {
   id: string;
   title: string;
   slug: string;
-  excerpt: string;
-  featuredImageUrl?: string;
+  excerpt: string | null;
+  featuredImageUrl?: string | null;
   tags: string[];
   category: string;
   publishedAt: string;

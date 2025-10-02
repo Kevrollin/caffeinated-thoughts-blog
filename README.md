@@ -5,6 +5,7 @@ A beautiful, modern blogging platform with integrated M-Pesa payments, built wit
 ## ✨ Features
 
 - 📝 **Markdown Blog Posts** - Rich text editing with syntax highlighting
+- 🖼️ **Stock Image Integration** - Insert images from Unsplash directly in posts
 - ☕ **Buy Me a Coffee** - M-Pesa STK Push integration
 - 🎨 **Beautiful Design** - Coffee-themed UI with smooth animations
 - 🌙 **Dark Mode** - Light and dark theme support
@@ -57,6 +58,10 @@ VITE_API_URL=http://localhost:4000/api/v1
 VITE_SITE_NAME=Caffeinated Thoughts
 VITE_SITE_DESCRIPTION=A blog fueled by coffee and curiosity
 VITE_DEFAULT_COFFEE_AMOUNTS=[50,100,200]
+
+# Optional: Unsplash API for stock images
+# Get your API key from: https://unsplash.com/developers
+VITE_UNSPLASH_ACCESS_KEY=your_unsplash_access_key_here
 ```
 
 4. **Start the development server**
@@ -134,6 +139,37 @@ The app uses JWT-based authentication with refresh tokens:
 Email: kelvinmukaria2023@gmail.com
 Password: Kevdev@2025
 ```
+
+## 🖼️ Stock Image Integration
+
+The blog includes a powerful stock image picker that integrates with Unsplash:
+
+### Features
+- **Search & Browse**: Search for images by keyword or browse categories
+- **Real-time Preview**: See images immediately in your markdown content
+- **Accessibility**: Add custom alt text for all images
+- **Fallback Mode**: Uses demo images when API is not configured
+
+### Setup Unsplash API (Optional)
+
+1. **Get API Key**:
+   - Go to [Unsplash Developers](https://unsplash.com/developers)
+   - Create a new application
+   - Copy your Access Key
+
+2. **Configure Environment**:
+   ```env
+   VITE_UNSPLASH_ACCESS_KEY=your_actual_access_key_here
+   ```
+
+3. **Usage**:
+   - Click the Image button (🖼️) in the markdown editor
+   - Search for images or browse categories
+   - Select an image and add alt text
+   - Click "Insert Image" to add to your content
+
+### Demo Mode
+If no API key is configured, the system automatically uses demo images from Unsplash, so the functionality works out of the box.
 
 ## 💳 M-Pesa Integration
 
