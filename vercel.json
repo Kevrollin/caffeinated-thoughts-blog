@@ -1,0 +1,5 @@
+{
+  "env": {
+    "VITE_API_URL": "https://caffeinated-thoughts-backend.onrender.com/api/v1"
+  }
+}
