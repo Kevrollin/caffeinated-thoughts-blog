@@ -20,12 +20,11 @@ interface BuyCoffeeModalProps {
   postId?: string;
 }
 
-const DEFAULT_AMOUNTS = [50, 100, 200];
+// Removed default amounts - users must enter custom amount
 
 export const BuyCoffeeModal = ({ isOpen, onClose, postId }: BuyCoffeeModalProps) => {
   const [phone, setPhone] = useState('');
-  const [amount, setAmount] = useState(100);
-  const [customAmount, setCustomAmount] = useState('');
+  const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [checkoutRequestId, setCheckoutRequestId] = useState<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'failed'>('idle');
@@ -75,7 +74,22 @@ export const BuyCoffeeModal = ({ isOpen, onClose, postId }: BuyCoffeeModalProps)
       return;
     }
 
-    const finalAmount = customAmount ? parseInt(customAmount) : amount;
+    // Validate amount
+    if (!amount || amount.trim() === '') {
+      const error = 'Please enter an amount';
+      setErrorMessage(error);
+      toast.error(error);
+      return;
+    }
+
+    const finalAmount = parseInt(amount);
+    
+    if (isNaN(finalAmount)) {
+      const error = 'Please enter a valid number';
+      setErrorMessage(error);
+      toast.error(error);
+      return;
+    }
     
     if (finalAmount < 10) {
       const error = 'Minimum amount is KES 10';
@@ -291,8 +305,7 @@ export const BuyCoffeeModal = ({ isOpen, onClose, postId }: BuyCoffeeModalProps)
 
   const resetModal = () => {
     setPhone('');
-    setAmount(100);
-    setCustomAmount('');
+    setAmount('');
     setLoading(false);
     setCheckoutRequestId(null);
     setStatus('idle');
@@ -330,38 +343,25 @@ export const BuyCoffeeModal = ({ isOpen, onClose, postId }: BuyCoffeeModalProps)
               exit={{ opacity: 0 }}
               className="space-y-4"
             >
-              {/* Amount Selection */}
+              {/* Amount Input */}
               <div>
-                <Label>Select Amount (KES)</Label>
-                <div className="grid grid-cols-3 gap-2 mt-2">
-                  {DEFAULT_AMOUNTS.map((amt) => (
-                    <Button
-                      key={amt}
-                      type="button"
-                      variant={amount === amt ? 'default' : 'outline'}
-                      onClick={() => {
-                        setAmount(amt);
-                        setCustomAmount('');
-                      }}
-                      className={amount === amt ? 'bg-emerald hover:bg-emerald/90' : ''}
-                    >
-                      {amt} KES
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Custom Amount */}
-              <div>
-                <Label htmlFor="customAmount">Or Enter Custom Amount</Label>
+                <Label htmlFor="amount">Enter Amount (KES)</Label>
                 <Input
-                  id="customAmount"
+                  id="amount"
                   type="number"
                   min="10"
-                  placeholder="Enter amount..."
-                  value={customAmount}
-                  onChange={(e) => setCustomAmount(e.target.value)}
+                  max="70000"
+                  placeholder="Enter amount (10 - 70,000 KES)..."
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className={errorMessage ? 'border-red-500' : ''}
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Minimum: KES 10 • Maximum: KES 70,000
+                </p>
+                {errorMessage && (
+                  <p className="text-xs text-red-500 mt-1">{errorMessage}</p>
+                )}
               </div>
 
               {/* Phone Number */}
@@ -386,7 +386,7 @@ export const BuyCoffeeModal = ({ isOpen, onClose, postId }: BuyCoffeeModalProps)
               {/* Submit Button */}
               <Button
                 onClick={handleSubmit}
-                disabled={loading || !phone}
+                disabled={loading || !phone || !amount}
                 className="w-full bg-emerald hover:bg-emerald/90"
               >
                 Send STK Push
