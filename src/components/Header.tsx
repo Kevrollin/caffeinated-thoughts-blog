@@ -70,7 +70,7 @@ export const Header = () => {
             </Button>
 
             {/* Auth Actions */}
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <div className="hidden sm:flex items-center space-x-2">
                 <Button
                   variant="ghost"
@@ -91,16 +91,6 @@ export const Header = () => {
                   <span>Logout</span>
                 </Button>
               </div>
-            ) : (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate('/login')}
-                className="hidden sm:flex items-center space-x-1"
-              >
-                <LogIn className="h-4 w-4" />
-                <span>Login</span>
-              </Button>
             )}
 
             {/* Mobile Menu Toggle */}
@@ -160,7 +150,7 @@ export const Header = () => {
                     )}
                   </Button>
                   
-                  {isAuthenticated ? (
+                  {isAuthenticated && (
                     <>
                       <Button
                         variant="ghost"
@@ -184,19 +174,6 @@ export const Header = () => {
                         <span>Logout</span>
                       </Button>
                     </>
-                  ) : (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        navigate('/login');
-                        setIsMenuOpen(false);
-                      }}
-                      className="justify-start"
-                    >
-                      <LogIn className="h-4 w-4 mr-2" />
-                      <span>Login</span>
-                    </Button>
                   )}
                 </div>
               </nav>

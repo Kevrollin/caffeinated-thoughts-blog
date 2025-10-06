@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, FileText, DollarSign, Settings, Coffee } from 'lucide-react';
+import { LayoutDashboard, FileText, DollarSign, Settings, Coffee, MessageSquare } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const AdminLayout = () => {
@@ -18,6 +18,7 @@ const AdminLayout = () => {
   const navItems = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { name: 'Posts', path: '/admin/posts', icon: FileText },
+    { name: 'Threads', path: '/admin/threads', icon: MessageSquare },
     { name: 'Transactions', path: '/admin/transactions', icon: DollarSign },
     { name: 'Settings', path: '/admin/settings', icon: Settings },
   ];

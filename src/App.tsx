@@ -9,14 +9,19 @@ import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import Home from "./pages/Home";
 import PostDetail from "./pages/PostDetail";
+import ThreadDetail from "./pages/ThreadDetail";
 import About from "./pages/About";
 import Categories from "./pages/Categories";
 import Login from "./pages/Login";
+import DirectAdmin from "./pages/DirectAdmin";
 import AdminLayout from "./components/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import PostsList from "./pages/admin/PostsList";
 import NewPost from "./pages/admin/NewPost";
 import EditPost from "./pages/admin/EditPost";
+import ThreadsList from "./pages/admin/ThreadsList";
+import NewThread from "./pages/admin/NewThread";
+import ThreadPosts from "./pages/admin/ThreadPosts";
 import Transactions from "./pages/admin/Transactions";
 import Settings from "./pages/admin/Settings";
 import NotFound from "./pages/NotFound";
@@ -43,9 +48,11 @@ const App = () => (
               {/* Public Routes */}
               <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
               <Route path="/post/:slug" element={<PublicLayout><PostDetail /></PublicLayout>} />
+              <Route path="/thread/:slug" element={<PublicLayout><ThreadDetail /></PublicLayout>} />
               <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
               <Route path="/categories" element={<PublicLayout><Categories /></PublicLayout>} />
               <Route path="/login" element={<Login />} />
+              <Route path="/admin-access" element={<DirectAdmin />} />
               
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminLayout />}>
@@ -53,6 +60,9 @@ const App = () => (
                 <Route path="posts" element={<PostsList />} />
                 <Route path="posts/new" element={<NewPost />} />
                 <Route path="posts/:id/edit" element={<EditPost />} />
+                <Route path="threads" element={<ThreadsList />} />
+                <Route path="threads/new" element={<NewThread />} />
+                <Route path="threads/:id/posts" element={<ThreadPosts />} />
                 <Route path="transactions" element={<Transactions />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
