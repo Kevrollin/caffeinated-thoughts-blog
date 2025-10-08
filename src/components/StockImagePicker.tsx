@@ -187,13 +187,29 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <ImageIcon className="h-5 w-5" />
-            Choose Stock Image
-          </DialogTitle>
-          <DialogDescription>
-            Select an image from Unsplash to insert into your blog post
-          </DialogDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <DialogTitle className="flex items-center gap-2">
+                <ImageIcon className="h-5 w-5" />
+                Choose Stock Image
+              </DialogTitle>
+              <DialogDescription>
+                Select an image from Unsplash to insert into your blog post
+              </DialogDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleInsertImage} 
+                disabled={!selectedImage}
+                className={selectedImage ? "bg-primary hover:bg-primary/90" : ""}
+              >
+                {selectedImage ? "Insert Image" : "Select an image first"}
+              </Button>
+            </div>
+          </div>
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto space-y-4">
@@ -282,20 +298,6 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
             </div>
           )}
 
-        </div>
-
-        {/* Actions - Always visible at bottom */}
-        <div className="flex justify-end gap-2 pt-4 border-t bg-background">
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button 
-            onClick={handleInsertImage} 
-            disabled={!selectedImage}
-            className={selectedImage ? "bg-primary hover:bg-primary/90" : ""}
-          >
-            {selectedImage ? "Insert Image" : "Select an image first"}
-          </Button>
         </div>
       </DialogContent>
     </Dialog>
