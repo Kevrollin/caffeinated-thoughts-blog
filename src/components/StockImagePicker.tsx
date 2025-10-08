@@ -45,21 +45,13 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
   const searchImages = async (query: string = '') => {
     setLoading(true);
     try {
-      // Check if we have a valid API key
-      const apiKey = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
-      
-      if (!apiKey || apiKey === 'YOUR_UNSPLASH_ACCESS_KEY') {
-        // Use demo images if no API key is configured
-        setImages(getDemoImages());
-        toast.info('Using demo images. Configure VITE_UNSPLASH_ACCESS_KEY for real images.');
-        return;
-      }
-
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
       const response = await fetch(
-        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=20&orientation=landscape`,
+        `${apiUrl}/api/v1/unsplash/search?query=${encodeURIComponent(query)}&perPage=20`,
         {
           headers: {
-            'Authorization': `Client-ID ${apiKey}`,
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+            'Content-Type': 'application/json',
           }
         }
       );
@@ -72,7 +64,12 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
       }
 
       const data = await response.json();
-      setImages(data.results || []);
+      if (data.success) {
+        setImages(data.data.results || []);
+      } else {
+        setImages(getDemoImages());
+        toast.warning('Failed to fetch images. Using demo images.');
+      }
     } catch (error) {
       console.error('Error fetching images:', error);
       // Fallback to demo images
@@ -80,6 +77,26 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
       toast.warning('Network error. Using demo images.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Track image download (required by Unsplash API terms)
+  const trackDownload = async (image: UnsplashImage) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+      await fetch(`${apiUrl}/api/v1/unsplash/track-download`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          downloadUrl: image.links.download_location
+        })
+      });
+    } catch (error) {
+      console.error('Error tracking download:', error);
+      // Don't show error to user, this is just for tracking
     }
   };
 
@@ -176,6 +193,9 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
 
   const handleInsertImage = () => {
     if (selectedImage) {
+      // Track download for Unsplash API compliance
+      trackDownload(selectedImage);
+      
       onImageSelect(selectedImage.urls.regular, customAltText);
       onClose();
       setSelectedImage(null);

@@ -10,6 +10,7 @@ import { apiClient } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BuyCoffeeModal } from '@/components/BuyCoffeeModal';
+import { markdownComponents } from '@/lib/markdown';
 import { toast } from 'sonner';
 import 'highlight.js/styles/github-dark.css';
 
@@ -156,6 +157,7 @@ const PostDetail = () => {
               <ReactMarkdown
                 rehypePlugins={[rehypeHighlight, rehypeRaw]}
                 remarkPlugins={[remarkGfm]}
+                components={markdownComponents}
               >
                 {post.contentMarkdown}
               </ReactMarkdown>
