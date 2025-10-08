@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Search, Download, X, Loader2, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
+import { apiClient } from '@/lib/api';
 
 interface UnsplashImage {
   id: string;
@@ -45,27 +46,10 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
   const searchImages = async (query: string = '') => {
     setLoading(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const response = await fetch(
-        `${apiUrl}/api/v1/unsplash/search?query=${encodeURIComponent(query)}&perPage=20`,
-        {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-
-      if (!response.ok) {
-        // Fallback to demo images if API fails
-        setImages(getDemoImages());
-        toast.warning('API request failed. Using demo images.');
-        return;
-      }
-
-      const data = await response.json();
-      if (data.success) {
-        setImages(data.data.results || []);
+      const response = await apiClient.get(`/unsplash/search?query=${encodeURIComponent(query)}&perPage=20`);
+      
+      if (response.data.success) {
+        setImages(response.data.data.results || []);
       } else {
         setImages(getDemoImages());
         toast.warning('Failed to fetch images. Using demo images.');
@@ -83,16 +67,8 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
   // Track image download (required by Unsplash API terms)
   const trackDownload = async (image: UnsplashImage) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      await fetch(`${apiUrl}/api/v1/unsplash/track-download`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          downloadUrl: image.links.download_location
-        })
+      await apiClient.post('/unsplash/track-download', {
+        downloadUrl: image.links.download_location
       });
     } catch (error) {
       console.error('Error tracking download:', error);

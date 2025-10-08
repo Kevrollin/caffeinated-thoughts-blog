@@ -44,7 +44,7 @@ const EditPost = () => {
   const fetchPost = async () => {
     try {
       const response = await apiClient.get(`/admin/posts/${id}`);
-      const post = response.data;
+      const post = response.data.post; // Backend returns { post: {...} }
       setFormData({
         title: post.title || "",
         contentMarkdown: post.contentMarkdown || "",
