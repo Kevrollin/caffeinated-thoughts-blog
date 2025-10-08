@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { FileText, Github, Twitter, Linkedin, Mail, Coffee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BuyCoffeeModal } from '@/components/BuyCoffeeModal';
