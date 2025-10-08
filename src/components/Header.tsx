@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Coffee, Moon, Sun, Menu, X, LogIn, LogOut, LayoutDashboard } from 'lucide-react';
+import { FileText, Moon, Sun, Menu, X, LogIn, LogOut, LayoutDashboard } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -33,10 +33,10 @@ export const Header = () => {
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
             >
-              <Coffee className="h-6 w-6 text-coffee" />
+              <FileText className="h-6 w-6 text-coffee" />
             </motion.div>
             <span className="text-xl font-heading font-bold text-coffee">
-              Caffeinated Thoughts
+              PatchNotes
             </span>
           </Link>
 

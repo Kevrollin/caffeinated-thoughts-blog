@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Coffee, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { FileText, Github, Twitter, Linkedin, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BuyCoffeeModal } from '@/components/BuyCoffeeModal';
@@ -24,13 +24,13 @@ const About = () => {
               transition={{ duration: 2, repeat: Infinity }}
               className="flex justify-center mb-6"
             >
-              <Coffee className="h-12 w-12 sm:h-16 sm:w-16 text-coffee" />
+              <FileText className="h-12 w-12 sm:h-16 sm:w-16 text-coffee" />
             </motion.div>
             <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-gradient-coffee">
-              About Caffeinated Thoughts
+              About PatchNotes
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground">
-              Where coffee meets code, and thoughts flow freely
+              Where technology meets insights, and updates flow freely
             </p>
           </motion.div>
         </div>
@@ -52,13 +52,13 @@ const About = () => {
               </h2>
               <div className="prose dark:prose-invert max-w-none">
                 <p>
-                  Welcome to Caffeinated Thoughts, a digital space where technology, 
-                  creativity, and a love for coffee come together. This blog was born 
-                  from late-night coding sessions fueled by endless cups of coffee and 
+                  Welcome to PatchNotes, a digital space where technology, 
+                  insights, and development updates come together. This blog was born 
+                  from the need to share the latest updates, insights, and 
                   a desire to share knowledge with the world.
                 </p>
                 <p>
-                  Every post here is crafted with care, just like a perfect brew. 
+                  Every post here is crafted with care, focusing on clarity and usefulness. 
                   Whether you're here to learn about the latest in web development, 
                   explore creative solutions to technical problems, or simply enjoy 
                   some thoughtful writing, you're in the right place.

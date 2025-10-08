@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Coffee, Loader2 } from 'lucide-react';
+import { FileText, Loader2 } from 'lucide-react';
 import { apiClient } from '@/lib/api';
 import { PostCard } from '@/components/PostCard';
 import { NewsletterSubscription } from '@/components/NewsletterSubscription';
@@ -63,7 +63,7 @@ const Home = () => {
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
         >
-          <Coffee className="h-12 w-12 text-coffee" />
+          <FileText className="h-12 w-12 text-coffee" />
         </motion.div>
       </div>
     );
@@ -85,15 +85,15 @@ const Home = () => {
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Coffee className="h-10 w-10 sm:h-12 sm:w-12 text-coffee" />
+                <FileText className="h-10 w-10 sm:h-12 sm:w-12 text-coffee" />
               </motion.div>
             </div>
             <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gradient-coffee leading-tight">
-              Caffeinated Thoughts
+              PatchNotes
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground">
-              A blog fueled by coffee and curiosity. Exploring technology, creativity, 
-              and everything in between by Dev.MK
+              Stay updated with the latest technology insights, development updates, 
+              and tech discussions by Dev.MK
             </p>
           </motion.div>
         </div>
@@ -103,10 +103,10 @@ const Home = () => {
       <section className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {posts.length === 0 ? (
           <div className="text-center py-12">
-            <Coffee className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-xl font-medium mb-2">No posts yet</h3>
             <p className="text-muted-foreground">
-              Check back soon for fresh content!
+              Check back soon for fresh updates!
             </p>
           </div>
         ) : (
@@ -150,10 +150,10 @@ const Home = () => {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-2xl sm:text-3xl font-heading font-bold mb-4 text-coffee">
-                Stay in the Loop
+                Stay Updated
               </h2>
               <p className="text-muted-foreground mb-8">
-                Get notified when we publish new articles. No spam, just quality content delivered to your inbox.
+                Get notified when we publish new updates. No spam, just quality content delivered to your inbox.
               </p>
               <NewsletterSubscription 
                 variant="default"

@@ -1,4 +1,4 @@
-# ☕ Caffeinated Thoughts - Frontend
+# 📝 PatchNotes - Frontend
 
 A beautiful, modern blogging platform with integrated M-Pesa payments, built with React, TypeScript, and Tailwind CSS.
 
@@ -7,7 +7,7 @@ A beautiful, modern blogging platform with integrated M-Pesa payments, built wit
 - 📝 **Markdown Blog Posts** - Rich text editing with syntax highlighting
 - 🖼️ **Stock Image Integration** - Insert images from Unsplash directly in posts
 - ☕ **Buy Me a Coffee** - M-Pesa STK Push integration
-- 🎨 **Beautiful Design** - Coffee-themed UI with smooth animations
+- 🎨 **Beautiful Design** - Modern UI with smooth animations
 - 🌙 **Dark Mode** - Light and dark theme support
 - 📱 **Responsive** - Mobile-first design
 - 🔐 **Admin Dashboard** - Secure post management
@@ -55,8 +55,8 @@ cp .env.example .env
 Edit `.env` with your configuration:
 ```env
 VITE_API_URL=http://localhost:4000/api/v1
-VITE_SITE_NAME=Caffeinated Thoughts
-VITE_SITE_DESCRIPTION=A blog fueled by coffee and curiosity
+VITE_SITE_NAME=PatchNotes
+VITE_SITE_DESCRIPTION=Latest updates, insights, and tech discussions
 VITE_DEFAULT_COFFEE_AMOUNTS=[50,100,200]
 
 # Optional: Unsplash API for stock images

@@ -1,4 +1,4 @@
-import { Coffee, Github, Twitter, Linkedin } from 'lucide-react';
+import { FileText, Github, Twitter, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { NewsletterSubscription } from './NewsletterSubscription';
 
@@ -10,14 +10,14 @@ export const Footer = () => {
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <Coffee className="h-6 w-6 text-coffee" />
+              <FileText className="h-6 w-6 text-coffee" />
               <span className="text-lg font-heading font-bold text-coffee">
-                Caffeinated Thoughts
+                PatchNotes
               </span>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">
-              A blog fueled by coffee and curiosity. Sharing thoughts on technology, 
-              creativity, and everything in between.
+              Stay updated with the latest technology insights, development updates, 
+              and tech discussions.
             </p>
           </div>
 
@@ -82,7 +82,7 @@ export const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Caffeinated Thoughts. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} PatchNotes. All rights reserved.</p>
         </div>
       </div>
     </footer>

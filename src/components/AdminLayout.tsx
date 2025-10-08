@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, FileText, DollarSign, Settings, Coffee, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, FileText, DollarSign, Settings, FileText as PatchIcon, MessageSquare } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const AdminLayout = () => {
@@ -37,7 +37,7 @@ const AdminLayout = () => {
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
         >
-          <Coffee className="h-12 w-12 text-coffee" />
+          <PatchIcon className="h-12 w-12 text-coffee" />
         </motion.div>
       </div>
     );
@@ -54,8 +54,8 @@ const AdminLayout = () => {
         <aside className="hidden md:flex flex-col w-64 border-r bg-background">
           <div className="p-6">
             <div className="flex items-center space-x-2">
-              <Coffee className="h-6 w-6 text-coffee" />
-              <span className="font-heading font-bold text-lg">Admin Panel</span>
+              <PatchIcon className="h-6 w-6 text-coffee" />
+              <span className="font-heading font-bold text-lg">PatchNotes Admin</span>
             </div>
           </div>
           
