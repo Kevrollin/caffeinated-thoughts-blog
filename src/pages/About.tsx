@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Coffee, Github, Twitter, Linkedin, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { BuyCoffeeModal } from '@/components/BuyCoffeeModal';
 
 const About = () => {
+  const [isCoffeeModalOpen, setIsCoffeeModalOpen] = useState(false);
+
   return (
-    <div className="min-h-screen">
+    <>
+      <div className="min-h-screen">
       {/* Hero */}
       <section className="bg-gradient-to-br from-cream to-amber/20 dark:from-charcoal dark:to-coffee/20 py-20">
         <div className="container mx-auto px-4">
@@ -95,25 +100,25 @@ const About = () => {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button variant="outline" size="lg" asChild>
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/Kevrollin" target="_blank" rel="noopener noreferrer">
                     <Github className="mr-2 h-4 w-4" />
                     GitHub
                   </a>
                 </Button>
                 <Button variant="outline" size="lg" asChild>
-                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                  <a href="https://x.com/kevrollin012/" target="_blank" rel="noopener noreferrer">
                     <Twitter className="mr-2 h-4 w-4" />
                     Twitter
                   </a>
                 </Button>
                 <Button variant="outline" size="lg" asChild>
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                  <a href="https://www.linkedin.com/in/kelvin-mukaria-831211359/?originalSubdomain=ke" target="_blank" rel="noopener noreferrer">
                     <Linkedin className="mr-2 h-4 w-4" />
                     LinkedIn
                   </a>
                 </Button>
                 <Button variant="outline" size="lg" asChild>
-                  <a href="mailto:hello@caffeinated-thoughts.com">
+                  <a href="kelvinmukaria2023@gmail.com">
                     <Mail className="mr-2 h-4 w-4" />
                     Email
                   </a>
@@ -133,15 +138,25 @@ const About = () => {
                 If you find value in what you read here, consider buying me a coffee! 
                 Your support helps keep this blog running and enables me to create more content.
               </p>
-              <Button size="lg" className="bg-emerald hover:bg-emerald/90">
+              <Button 
+                size="lg" 
+                className="bg-emerald hover:bg-emerald/90"
+                onClick={() => setIsCoffeeModalOpen(true)}
+              >
                 <Coffee className="mr-2 h-5 w-5" />
-                Buy Me a Coffee
+                Do you like my Work?
               </Button>
             </CardContent>
           </Card>
         </motion.div>
       </section>
-    </div>
+      </div>
+
+      <BuyCoffeeModal
+        isOpen={isCoffeeModalOpen}
+        onClose={() => setIsCoffeeModalOpen(false)}
+      />
+    </>
   );
 };
 

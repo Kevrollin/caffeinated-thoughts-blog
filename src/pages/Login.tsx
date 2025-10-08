@@ -108,13 +108,13 @@ const Login = () => {
               </Button>
             </form>
 
-            <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+            {/* <div className="mt-6 p-4 bg-muted/50 rounded-lg">
               <p className="text-xs text-muted-foreground text-center">
                 Demo credentials:<br />
                 <strong>Email:</strong> kelvinmukaria2023@gmail.com<br />
                 <strong>Password:</strong> Kevdev@2025
               </p>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       </motion.div>
