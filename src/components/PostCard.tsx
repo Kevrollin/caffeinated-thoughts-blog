@@ -53,8 +53,8 @@ export const PostCard = ({ post }: PostCardProps) => {
             </div>
           )}
           
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4 text-xs text-muted-foreground mb-3">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-muted-foreground mb-3">
               <div className="flex items-center space-x-1">
                 <Calendar className="h-3 w-3" />
                 <span>{formatDate(post.publishedAt)}</span>
@@ -65,7 +65,7 @@ export const PostCard = ({ post }: PostCardProps) => {
               </div>
             </div>
 
-            <h3 className="font-heading text-xl font-bold mb-2 line-clamp-2 text-coffee">
+            <h3 className="font-heading text-lg sm:text-xl font-bold mb-2 line-clamp-2 text-coffee leading-tight">
               {post.title}
             </h3>
             
@@ -76,7 +76,7 @@ export const PostCard = ({ post }: PostCardProps) => {
             )}
           </CardContent>
 
-          <CardFooter className="px-6 pb-6 pt-0">
+          <CardFooter className="px-4 sm:px-6 pb-4 sm:pb-6 pt-0">
             <div className="flex items-center flex-wrap gap-2">
               <Badge variant="secondary" className="text-xs">
                 {post.category}

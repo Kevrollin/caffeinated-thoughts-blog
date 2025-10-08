@@ -71,8 +71,8 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-cream to-amber/20 dark:from-charcoal dark:to-coffee/20 py-20">
-        <div className="container mx-auto px-4">
+      <section className="bg-gradient-to-br from-cream to-amber/20 dark:from-charcoal dark:to-coffee/20 py-12 sm:py-16 lg:py-20">
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -84,13 +84,13 @@ const Home = () => {
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Coffee className="h-12 w-12 text-coffee" />
+                <Coffee className="h-10 w-10 sm:h-12 sm:w-12 text-coffee" />
               </motion.div>
             </div>
-            <h1 className="font-heading text-5xl md:text-6xl font-bold mb-6 text-gradient-coffee">
+            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gradient-coffee leading-tight">
               Caffeinated Thoughts
             </h1>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-lg sm:text-xl text-muted-foreground">
               A blog fueled by coffee and curiosity. Exploring technology, creativity, 
               and everything in between by Dev.MK
             </p>
@@ -99,7 +99,7 @@ const Home = () => {
       </section>
 
       {/* Posts Grid */}
-      <section className="container mx-auto px-4 py-16">
+      <section className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {posts.length === 0 ? (
           <div className="text-center py-12">
             <Coffee className="h-16 w-16 text-muted-foreground mx-auto mb-4" />

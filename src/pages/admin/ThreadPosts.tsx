@@ -171,36 +171,37 @@ const ThreadPosts = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+    <div className="max-w-7xl mx-auto space-y-6">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate('/admin/threads')}
+            className="self-start"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Threads
           </Button>
           <div>
-            <h1 className="text-3xl font-heading font-bold text-coffee">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold text-coffee">
               {threadData?.thread?.title}
             </h1>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-muted-foreground mt-2 text-sm sm:text-base">
               Manage posts in this thread
             </p>
           </div>
         </div>
         <Button
           onClick={() => navigate(`/admin/threads/${id}/posts/new`)}
-          className="bg-coffee hover:bg-coffee/90"
+          className="bg-coffee hover:bg-coffee/90 self-start lg:self-auto"
         >
           <Plus className="h-4 w-4 mr-2" />
           Add New Post to Thread
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Thread Posts */}
         <Card>
           <CardHeader>

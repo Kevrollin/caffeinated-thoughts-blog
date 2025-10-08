@@ -97,7 +97,7 @@ const PostDetail = () => {
     <>
       <article className="min-h-screen">
         {/* Back Button */}
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
           <Link to="/">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -118,7 +118,7 @@ const PostDetail = () => {
         )}
 
         {/* Content */}
-        <div className="container mx-auto px-4 py-12 max-w-4xl">
+        <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -138,7 +138,7 @@ const PostDetail = () => {
             </div>
 
             {/* Title */}
-            <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 text-coffee">
+            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-coffee leading-tight">
               {post.title}
             </h1>
 

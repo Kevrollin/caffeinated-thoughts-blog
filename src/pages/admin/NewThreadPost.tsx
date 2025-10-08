@@ -146,25 +146,26 @@ const NewThreadPost = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center gap-4 mb-6">
+    <div className="max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
         <Button
           variant="outline"
           size="sm"
           onClick={() => navigate(`/admin/threads/${threadId}/posts`)}
+          className="self-start"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Thread
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">Add Post to Thread</h1>
-          <p className="text-muted-foreground">Thread: {threadData.title}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">Add Post to Thread</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">Thread: {threadData.title}</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="xl:col-span-2 space-y-6">
           <Card>
             <CardHeader>
               <CardTitle>Post Content</CardTitle>
@@ -229,7 +230,7 @@ const NewThreadPost = () => {
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categoriesData?.map((category: string) => (
+                    {categoriesData?.filter((category: string) => category && category.trim() !== '').map((category: string) => (
                       <SelectItem key={category} value={category}>
                         {category}
                       </SelectItem>

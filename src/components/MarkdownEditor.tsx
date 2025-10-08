@@ -254,7 +254,7 @@ export const MarkdownEditor = ({
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-2 p-2 border rounded-lg bg-muted/50">
+      <div className="flex flex-wrap items-center gap-1 sm:gap-2 p-2 border rounded-lg bg-muted/50 overflow-x-auto">
         <Button
           type="button"
           variant="ghost"
@@ -321,7 +321,7 @@ export const MarkdownEditor = ({
         
         {/* Color buttons */}
         <div className="flex items-center gap-1 border rounded px-2 py-1 bg-background">
-          <span className="text-xs text-muted-foreground mr-1">Colors:</span>
+          <span className="text-xs text-muted-foreground mr-1 hidden sm:inline">Colors:</span>
           <Button
             type="button"
             variant="ghost"

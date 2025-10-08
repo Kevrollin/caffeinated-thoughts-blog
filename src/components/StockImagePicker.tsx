@@ -185,26 +185,27 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
+      <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col w-[95vw] sm:w-full">
         <DialogHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <DialogTitle className="flex items-center gap-2">
+              <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
                 <ImageIcon className="h-5 w-5" />
                 Choose Stock Image
               </DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="text-sm">
                 Select an image from Unsplash to insert into your blog post
               </DialogDescription>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={onClose}>
+              <Button variant="outline" onClick={onClose} size="sm" className="text-xs sm:text-sm">
                 Cancel
               </Button>
               <Button 
                 onClick={handleInsertImage} 
                 disabled={!selectedImage}
-                className={selectedImage ? "bg-primary hover:bg-primary/90" : ""}
+                size="sm"
+                className={`text-xs sm:text-sm ${selectedImage ? "bg-primary hover:bg-primary/90" : ""}`}
               >
                 {selectedImage ? "Insert Image" : "Select an image first"}
               </Button>
@@ -241,7 +242,7 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
           </div>
 
           {/* Images Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-80 overflow-y-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 max-h-80 overflow-y-auto">
             {images.map((image) => (
               <div
                 key={image.id}

@@ -12,8 +12,8 @@ const About = () => {
     <>
       <div className="min-h-screen">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-cream to-amber/20 dark:from-charcoal dark:to-coffee/20 py-20">
-        <div className="container mx-auto px-4">
+      <section className="bg-gradient-to-br from-cream to-amber/20 dark:from-charcoal dark:to-coffee/20 py-12 sm:py-16 lg:py-20">
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -24,12 +24,12 @@ const About = () => {
               transition={{ duration: 2, repeat: Infinity }}
               className="flex justify-center mb-6"
             >
-              <Coffee className="h-16 w-16 text-coffee" />
+              <Coffee className="h-12 w-12 sm:h-16 sm:w-16 text-coffee" />
             </motion.div>
-            <h1 className="font-heading text-5xl font-bold mb-6 text-gradient-coffee">
+            <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-gradient-coffee">
               About Caffeinated Thoughts
             </h1>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-lg sm:text-xl text-muted-foreground">
               Where coffee meets code, and thoughts flow freely
             </p>
           </motion.div>
@@ -37,7 +37,7 @@ const About = () => {
       </section>
 
       {/* Content */}
-      <section className="container mx-auto px-4 py-16 max-w-4xl">
+      <section className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 max-w-4xl">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
