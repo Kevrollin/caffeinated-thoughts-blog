@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Image, Bold, Italic, Link, List, Code, Eye, EyeOff, Type, Underline, Highlighter, Palette } from 'lucide-react';
+import { Image, Bold, Italic, Link, List, Code, Eye, EyeOff, Type, Underline, Highlighter, Palette, Strikethrough } from 'lucide-react';
 import { StockImagePicker } from './StockImagePicker';
 
 interface MarkdownEditorProps {
@@ -22,6 +22,181 @@ export const MarkdownEditor = ({
   const [showPreview, setShowPreview] = useState(false);
   const [showImagePicker, setShowImagePicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Function to convert rich text/HTML to markdown
+  const convertRichTextToMarkdown = (html: string): string => {
+    // Create a temporary div to parse HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    // Function to process nodes recursively
+    const processNode = (node: Node): string => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return node.textContent || '';
+      }
+      
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as Element;
+        const tagName = element.tagName.toLowerCase();
+        const children = Array.from(node.childNodes).map(processNode).join('');
+        
+        switch (tagName) {
+          case 'h1':
+            return `# ${children}\n\n`;
+          case 'h2':
+            return `## ${children}\n\n`;
+          case 'h3':
+            return `### ${children}\n\n`;
+          case 'h4':
+            return `#### ${children}\n\n`;
+          case 'h5':
+            return `##### ${children}\n\n`;
+          case 'h6':
+            return `###### ${children}\n\n`;
+          case 'p':
+            return `${children}\n\n`;
+          case 'br':
+            return '\n';
+          case 'strong':
+          case 'b':
+            return `**${children}**`;
+          case 'em':
+          case 'i':
+            return `*${children}*`;
+          case 'u':
+            return `<u>${children}</u>`;
+          case 'mark':
+            return `<mark>${children}</mark>`;
+          case 'code':
+            return `\`${children}\``;
+          case 'pre':
+            return `\`\`\`\n${children}\n\`\`\`\n\n`;
+          case 'blockquote':
+            return `> ${children}\n\n`;
+          case 'ul':
+            return `${children}\n`;
+          case 'ol':
+            return `${children}\n`;
+          case 'li':
+            const parent = element.parentElement;
+            if (parent?.tagName.toLowerCase() === 'ol') {
+              return `1. ${children}\n`;
+            } else {
+              return `- ${children}\n`;
+            }
+          case 'a':
+            const href = element.getAttribute('href') || '';
+            return `[${children}](${href})`;
+          case 'img':
+            const src = element.getAttribute('src') || '';
+            const alt = element.getAttribute('alt') || '';
+            return `![${alt}](${src})`;
+          case 'hr':
+            return '---\n\n';
+          case 'span':
+            // Handle colored text and other inline styles
+            const style = element.getAttribute('style') || '';
+            if (style.includes('color:')) {
+              const colorMatch = style.match(/color:\s*([^;]+)/);
+              if (colorMatch) {
+                return `<span style="color: ${colorMatch[1]}">${children}</span>`;
+              }
+            }
+            // Handle background color (highlighting)
+            if (style.includes('background-color:') || style.includes('background:')) {
+              const bgMatch = style.match(/(?:background-color|background):\s*([^;]+)/);
+              if (bgMatch) {
+                return `<mark style="background-color: ${bgMatch[1]}">${children}</mark>`;
+              }
+            }
+            // Handle font size
+            if (style.includes('font-size:')) {
+              const sizeMatch = style.match(/font-size:\s*([^;]+)/);
+              if (sizeMatch) {
+                return `<span style="font-size: ${sizeMatch[1]}">${children}</span>`;
+              }
+            }
+            // Handle font weight
+            if (style.includes('font-weight:')) {
+              const weightMatch = style.match(/font-weight:\s*([^;]+)/);
+              if (weightMatch && (weightMatch[1] === 'bold' || parseInt(weightMatch[1]) >= 600)) {
+                return `**${children}**`;
+              }
+            }
+            // Handle font style
+            if (style.includes('font-style:') && style.includes('italic')) {
+              return `*${children}*`;
+            }
+            // Handle text decoration
+            if (style.includes('text-decoration:')) {
+              if (style.includes('underline')) {
+                return `<u>${children}</u>`;
+              }
+              if (style.includes('line-through')) {
+                return `~~${children}~~`;
+              }
+            }
+            return children;
+          case 'div':
+            // Handle divs with line breaks
+            return `${children}\n`;
+          default:
+            return children;
+        }
+      }
+      
+      return '';
+    };
+    
+    // Process all child nodes
+    const result = Array.from(tempDiv.childNodes).map(processNode).join('');
+    
+    // Clean up extra newlines and whitespace
+    return result
+      .replace(/\n{3,}/g, '\n\n') // Replace 3+ newlines with 2
+      .replace(/^\n+|\n+$/g, '') // Remove leading/trailing newlines
+      .trim();
+  };
+
+  // Handle paste events to convert rich text to markdown
+  const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const clipboardData = e.clipboardData;
+    const htmlData = clipboardData.getData('text/html');
+    const plainTextData = clipboardData.getData('text/plain');
+    
+    // Get cursor position
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    
+    let convertedText = '';
+    
+    if (htmlData) {
+      // Convert HTML to markdown
+      convertedText = convertRichTextToMarkdown(htmlData);
+    } else if (plainTextData) {
+      // If no HTML, use plain text but preserve line breaks
+      convertedText = plainTextData
+        .replace(/\r\n/g, '\n') // Normalize line endings
+        .replace(/\r/g, '\n');   // Handle old Mac line endings
+    }
+    
+    if (convertedText) {
+      // Insert the converted text at cursor position
+      const newValue = value.substring(0, start) + convertedText + value.substring(end);
+      onChange(newValue);
+      
+      // Set cursor position after inserted text
+      setTimeout(() => {
+        textarea.focus();
+        textarea.setSelectionRange(start + convertedText.length, start + convertedText.length);
+      }, 0);
+    }
+  };
 
   const insertAtCursor = (text: string) => {
     const textarea = textareaRef.current;
@@ -186,6 +361,24 @@ export const MarkdownEditor = ({
     }
   };
 
+  const insertStrikethrough = () => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = value.substring(start, end);
+    
+    if (selectedText) {
+      // Wrap selected text with strikethrough
+      const strikethrough = `~~${selectedText}~~`;
+      const newValue = value.substring(0, start) + strikethrough + value.substring(end);
+      onChange(newValue);
+    } else {
+      insertAtCursor('~~strikethrough text~~');
+    }
+  };
+
   const insertColoredText = (color: string) => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -229,9 +422,10 @@ export const MarkdownEditor = ({
       .replace(/^# (.*$)/gm, '<h1 class="text-2xl font-bold mt-6 mb-4 text-coffee">$1</h1>')
       // Images
       .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="max-w-full h-auto rounded-lg my-4" />')
-      // Bold and Italic
+      // Bold, Italic, and Strikethrough
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/~~(.*?)~~/g, '<del>$1</del>')
       // Code
       .replace(/`(.*?)`/g, '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>')
       // Links
@@ -315,6 +509,16 @@ export const MarkdownEditor = ({
           title="Highlight"
         >
           <Highlighter className="h-4 w-4" />
+        </Button>
+        
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={insertStrikethrough}
+          title="Strikethrough"
+        >
+          <Strikethrough className="h-4 w-4" />
         </Button>
         
         <div className="w-px h-6 bg-border" />
@@ -531,6 +735,7 @@ export const MarkdownEditor = ({
           ref={textareaRef}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onPaste={handlePaste}
           placeholder={placeholder}
           rows={rows}
           className="font-mono"

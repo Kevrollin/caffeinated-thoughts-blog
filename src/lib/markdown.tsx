@@ -123,6 +123,13 @@ export const markdownComponents = {
     </mark>
   ),
   
+  // Strikethrough
+  del: ({ children, ...props }: any) => (
+    <del className="line-through text-muted-foreground" {...props}>
+      {children}
+    </del>
+  ),
+  
   // Colored text
   span: ({ children, style, ...props }: any) => {
     if (style?.color) {
