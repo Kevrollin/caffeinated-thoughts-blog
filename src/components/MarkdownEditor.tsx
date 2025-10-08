@@ -42,6 +42,7 @@ export const MarkdownEditor = ({
 
   const handleImageSelect = (imageUrl: string, altText: string) => {
     const imageMarkdown = `![${altText}](${imageUrl})`;
+    console.log('Inserting image markdown:', imageMarkdown);
     insertAtCursor(imageMarkdown);
   };
 

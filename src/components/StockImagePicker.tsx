@@ -163,16 +163,20 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
   };
 
   const handleImageSelect = (image: UnsplashImage) => {
+    console.log('Image selected:', image);
     setSelectedImage(image);
     setCustomAltText(image.alt_description || '');
+    toast.success('Image selected! Click "Insert Image" to add it to your post.');
   };
 
   const handleInsertImage = () => {
     if (selectedImage) {
+      console.log('Inserting image:', selectedImage.urls.regular, 'with alt:', customAltText);
       // Track download for Unsplash API compliance
       trackDownload(selectedImage);
       
       onImageSelect(selectedImage.urls.regular, customAltText);
+      toast.success('Image inserted successfully!');
       onClose();
       setSelectedImage(null);
       setCustomAltText('');
@@ -240,6 +244,9 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
                   <div className="absolute top-2 right-2 bg-primary text-primary-foreground rounded-full p-1">
                     <Download className="h-3 w-3" />
                   </div>
+                )}
+                {selectedImage?.id === image.id && (
+                  <div className="absolute inset-0 bg-primary/20 border-2 border-primary rounded-lg" />
                 )}
               </div>
             ))}

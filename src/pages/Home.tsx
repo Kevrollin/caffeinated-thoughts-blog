@@ -92,7 +92,7 @@ const Home = () => {
             </h1>
             <p className="text-xl text-muted-foreground">
               A blog fueled by coffee and curiosity. Exploring technology, creativity, 
-              and everything in between.
+              and everything in between by Dev.MK
             </p>
           </motion.div>
         </div>
