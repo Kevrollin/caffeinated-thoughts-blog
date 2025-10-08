@@ -185,7 +185,7 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
+      <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <ImageIcon className="h-5 w-5" />
@@ -196,7 +196,7 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="flex-1 overflow-y-auto space-y-4">
           {/* Search */}
           <form onSubmit={handleSearch} className="flex gap-2">
             <Input
@@ -225,7 +225,7 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
           </div>
 
           {/* Images Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-96 overflow-y-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-80 overflow-y-auto">
             {images.map((image) => (
               <div
                 key={image.id}
@@ -282,15 +282,20 @@ export const StockImagePicker = ({ isOpen, onClose, onImageSelect }: StockImageP
             </div>
           )}
 
-          {/* Actions */}
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button onClick={handleInsertImage} disabled={!selectedImage}>
-              Insert Image
-            </Button>
-          </div>
+        </div>
+
+        {/* Actions - Always visible at bottom */}
+        <div className="flex justify-end gap-2 pt-4 border-t bg-background">
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleInsertImage} 
+            disabled={!selectedImage}
+            className={selectedImage ? "bg-primary hover:bg-primary/90" : ""}
+          >
+            {selectedImage ? "Insert Image" : "Select an image first"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
