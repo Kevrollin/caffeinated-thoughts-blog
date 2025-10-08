@@ -12,7 +12,6 @@ import { Badge } from "@/components/ui/badge";
 import { X, Save, ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { apiClient } from "@/lib/api";
-import { ImageUpload } from "@/components/ImageUpload";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
 
 const NewThreadPost = () => {
@@ -27,7 +26,6 @@ const NewThreadPost = () => {
     excerpt: "",
     category: "",
     tags: [] as string[],
-    featuredImageUrl: "",
     status: "DRAFT" as "DRAFT" | "PUBLISHED"
   });
   
@@ -41,6 +39,15 @@ const NewThreadPost = () => {
       return response.data.thread;
     },
     enabled: !!threadId
+  });
+
+  // Fetch categories from backend
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const response = await apiClient.get('/posts/categories');
+      return response.data.categories;
+    }
   });
 
   useEffect(() => {
@@ -217,12 +224,18 @@ const NewThreadPost = () => {
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="category">Category</Label>
-                <Input
-                  id="category"
-                  value={formData.category}
-                  onChange={(e) => handleInputChange("category", e.target.value)}
-                  placeholder="e.g., Technology, Tutorial"
-                />
+                <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categoriesData?.map((category: string) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>
@@ -252,19 +265,6 @@ const NewThreadPost = () => {
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="featuredImage">Featured Image URL</Label>
-                <Input
-                  id="featuredImage"
-                  value={formData.featuredImageUrl}
-                  onChange={(e) => handleInputChange("featuredImageUrl", e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                />
-                <ImageUpload
-                  onImageUpload={(url) => handleInputChange("featuredImageUrl", url)}
-                  currentImageUrl={formData.featuredImageUrl}
-                />
-              </div>
 
               <div>
                 <Label htmlFor="status">Status</Label>

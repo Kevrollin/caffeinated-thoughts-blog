@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +12,6 @@ import { Badge } from "@/components/ui/badge";
 import { X, Save, ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { apiClient } from "@/lib/api";
-import { ImageUpload } from "@/components/ImageUpload";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
 
 const EditPost = () => {
@@ -27,11 +27,19 @@ const EditPost = () => {
     excerpt: "",
     category: "",
     tags: [] as string[],
-    featuredImageUrl: "",
     status: "DRAFT" as "DRAFT" | "PUBLISHED"
   });
   
   const [newTag, setNewTag] = useState("");
+
+  // Fetch categories from backend
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const response = await apiClient.get('/posts/categories');
+      return response.data.categories;
+    }
+  });
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -51,7 +59,6 @@ const EditPost = () => {
         excerpt: post.excerpt || "",
         category: post.category || "",
         tags: post.tags || [],
-        featuredImageUrl: post.featuredImageUrl || "",
         status: post.status || "DRAFT"
       });
     } catch (error: any) {
@@ -207,19 +214,14 @@ const EditPost = () => {
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="general">General</SelectItem>
-                    <SelectItem value="programming">Programming</SelectItem>
-                    <SelectItem value="lifestyle">Lifestyle</SelectItem>
-                    <SelectItem value="tutorials">Tutorials</SelectItem>
-                    <SelectItem value="reviews">Reviews</SelectItem>
+                    {categoriesData?.map((category: string) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
-
-              <ImageUpload
-                onImageUploaded={(imageUrl) => handleInputChange("featuredImageUrl", imageUrl)}
-                currentImageUrl={formData.featuredImageUrl}
-              />
 
               <div>
                 <Label htmlFor="tags">Tags</Label>
