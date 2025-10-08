@@ -14,6 +14,7 @@ import About from "./pages/About";
 import Categories from "./pages/Categories";
 import Login from "./pages/Login";
 import DirectAdmin from "./pages/DirectAdmin";
+import Unsubscribe from "./pages/Unsubscribe";
 import AdminLayout from "./components/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import PostsList from "./pages/admin/PostsList";
@@ -54,6 +55,7 @@ const App = () => (
               <Route path="/categories" element={<PublicLayout><Categories /></PublicLayout>} />
               <Route path="/login" element={<Login />} />
               <Route path="/admin-access" element={<DirectAdmin />} />
+              <Route path="/unsubscribe" element={<Unsubscribe />} />
               
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminLayout />}>

@@ -1,11 +1,12 @@
 import { Coffee, Github, Twitter, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { NewsletterSubscription } from './NewsletterSubscription';
 
 export const Footer = () => {
   return (
     <footer className="border-t bg-muted/30 mt-16">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
@@ -47,7 +48,7 @@ export const Footer = () => {
             <h3 className="font-heading font-semibold mb-4">Connect</h3>
             <div className="flex space-x-4">
               <a
-                href="https://github.com"
+                href="https://github.com/Kevrollin"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-coffee transition-colors"
@@ -55,7 +56,7 @@ export const Footer = () => {
                 <Github className="h-5 w-5" />
               </a>
               <a
-                href="https://twitter.com"
+                href="https://x.com/kevrollin012/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-coffee transition-colors"
@@ -63,7 +64,7 @@ export const Footer = () => {
                 <Twitter className="h-5 w-5" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/kelvin-mukaria-831211359/?originalSubdomain=ke"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-coffee transition-colors"
@@ -71,6 +72,12 @@ export const Footer = () => {
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <h3 className="font-heading font-semibold mb-4">Newsletter</h3>
+            <NewsletterSubscription variant="compact" />
           </div>
         </div>
 

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Coffee, Loader2 } from 'lucide-react';
 import { apiClient } from '@/lib/api';
 import { PostCard } from '@/components/PostCard';
+import { NewsletterSubscription } from '@/components/NewsletterSubscription';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -137,6 +138,31 @@ const Home = () => {
             )}
           </>
         )}
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="bg-gradient-to-br from-coffee/10 to-amber/10 dark:from-coffee/20 dark:to-amber/20 py-16">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-2xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <h2 className="text-2xl sm:text-3xl font-heading font-bold mb-4 text-coffee">
+                Stay in the Loop
+              </h2>
+              <p className="text-muted-foreground mb-8">
+                Get notified when we publish new articles. No spam, just quality content delivered to your inbox.
+              </p>
+              <NewsletterSubscription 
+                variant="default"
+                title="Subscribe to Our Newsletter"
+                description="Get the latest articles delivered to your inbox"
+              />
+            </motion.div>
+          </div>
+        </div>
       </section>
     </div>
   );
