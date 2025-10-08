@@ -172,23 +172,32 @@ const ThreadPosts = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      <div className="flex items-center space-x-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate('/admin/threads')}
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Threads
-        </Button>
-        <div>
-          <h1 className="text-3xl font-heading font-bold text-coffee">
-            {threadData?.thread?.title}
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Manage posts in this thread
-          </p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/admin/threads')}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Threads
+          </Button>
+          <div>
+            <h1 className="text-3xl font-heading font-bold text-coffee">
+              {threadData?.thread?.title}
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Manage posts in this thread
+            </p>
+          </div>
         </div>
+        <Button
+          onClick={() => navigate(`/admin/threads/${id}/posts/new`)}
+          className="bg-coffee hover:bg-coffee/90"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Add New Post to Thread
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
