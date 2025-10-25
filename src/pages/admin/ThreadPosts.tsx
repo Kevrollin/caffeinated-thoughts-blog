@@ -12,7 +12,10 @@ import {
   FileText,
   Eye,
   EyeOff,
-  GripVertical
+  GripVertical,
+  Globe,
+  Lock,
+  MoreHorizontal
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -118,6 +121,36 @@ const ThreadPosts = () => {
     }
   });
 
+  const promoteToGeneralMutation = useMutation({
+    mutationFn: async (postId: string) => {
+      const { data } = await apiClient.post(`/admin/posts/${postId}/promote-to-general`);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['thread', id] });
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      toast.success('Post promoted to general posts');
+    },
+    onError: () => {
+      toast.error('Failed to promote post');
+    }
+  });
+
+  const makeThreadOnlyMutation = useMutation({
+    mutationFn: async (postId: string) => {
+      const { data } = await apiClient.post(`/admin/posts/${postId}/make-thread-only`);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['thread', id] });
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      toast.success('Post made thread-only');
+    },
+    onError: () => {
+      toast.error('Failed to make post thread-only');
+    }
+  });
+
   const handleAddPost = (postId: string) => {
     addPostMutation.mutate(postId);
   };
@@ -125,6 +158,18 @@ const ThreadPosts = () => {
   const handleRemovePost = (postId: string) => {
     if (window.confirm('Are you sure you want to remove this post from the thread?')) {
       removePostMutation.mutate(postId);
+    }
+  };
+
+  const handlePromoteToGeneral = (postId: string) => {
+    if (window.confirm('Promote this post to general posts? It will be visible on the main blog.')) {
+      promoteToGeneralMutation.mutate(postId);
+    }
+  };
+
+  const handleMakeThreadOnly = (postId: string) => {
+    if (window.confirm('Make this post thread-only? It will be removed from the main blog.')) {
+      makeThreadOnlyMutation.mutate(postId);
     }
   };
 
@@ -233,6 +278,11 @@ const ThreadPosts = () => {
                     <Badge variant={post.status === 'PUBLISHED' ? 'default' : 'secondary'}>
                       {post.status}
                     </Badge>
+                    {post.isThreadOnly && (
+                      <Badge variant="outline" className="text-xs">
+                        Thread Only
+                      </Badge>
+                    )}
                     <div className="flex items-center space-x-1">
                       <Button
                         variant="ghost"
@@ -266,6 +316,21 @@ const ThreadPosts = () => {
                           <Eye className="h-4 w-4 mr-2" />
                           View Post
                         </DropdownMenuItem>
+                        {post.isThreadOnly ? (
+                          <DropdownMenuItem 
+                            onClick={() => handlePromoteToGeneral(post.id)}
+                          >
+                            <Globe className="h-4 w-4 mr-2" />
+                            Promote to General Posts
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem 
+                            onClick={() => handleMakeThreadOnly(post.id)}
+                          >
+                            <Lock className="h-4 w-4 mr-2" />
+                            Make Thread-Only
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem 
                           onClick={() => handleRemovePost(post.id)}
                           className="text-destructive"
