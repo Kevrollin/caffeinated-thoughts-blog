@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-// Updated API URL for Render backend deployment
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://caffeinated-thoughts-backend.onrender.com/api/v1';
+// API URL configuration - supports both local and production
+export const API_BASE_URL = import.meta.env.VITE_API_URL 
+  ? `${import.meta.env.VITE_API_URL}/api/v1`
+  : 'https://caffeinated-thoughts-backend.vercel.app/api/v1';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
