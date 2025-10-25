@@ -10,6 +10,7 @@ import { Footer } from "./components/Footer";
 import Home from "./pages/Home";
 import PostDetail from "./pages/PostDetail";
 import ThreadDetail from "./pages/ThreadDetail";
+import ThreadsPage from "./pages/ThreadsPage";
 import About from "./pages/About";
 import Categories from "./pages/Categories";
 import Login from "./pages/Login";
@@ -50,6 +51,7 @@ const App = () => (
               {/* Public Routes */}
               <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
               <Route path="/post/:slug" element={<PublicLayout><PostDetail /></PublicLayout>} />
+              <Route path="/threads" element={<PublicLayout><ThreadsPage /></PublicLayout>} />
               <Route path="/thread/:slug" element={<PublicLayout><ThreadDetail /></PublicLayout>} />
               <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
               <Route path="/categories" element={<PublicLayout><Categories /></PublicLayout>} />

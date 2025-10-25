@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { FileText, Moon, Sun, Menu, X, LogIn, LogOut, LayoutDashboard } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -11,21 +11,63 @@ export const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
+  // Close menu on escape key
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isMenuOpen]);
 
   const handleLogout = async () => {
     await logout();
+    setIsMenuOpen(false);
     navigate('/');
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
   };
 
   const navLinks = [
     { name: 'Home', path: '/' },
+    { name: 'Threads', path: '/threads' },
     { name: 'Categories', path: '/categories' },
     { name: 'About', path: '/about' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
+    <>
+      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" ref={menuRef}>
+        <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
@@ -116,15 +158,15 @@ export const Header = () => {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="md:hidden overflow-hidden border-t"
+              className="md:hidden overflow-hidden border-t bg-background relative z-50"
             >
-              <nav className="flex flex-col space-y-4 py-4">
+              <nav className="flex flex-col space-y-2 py-4">
                 {navLinks.map((link) => (
                   <Link
                     key={link.path}
                     to={link.path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="text-sm font-medium text-foreground/80 hover:text-coffee transition-colors"
+                    onClick={closeMenu}
+                    className="text-sm font-medium text-foreground/80 hover:text-coffee transition-colors px-2 py-2 rounded-md hover:bg-accent"
                   >
                     {link.name}
                   </Link>
@@ -157,7 +199,7 @@ export const Header = () => {
                         size="sm"
                         onClick={() => {
                           navigate('/admin');
-                          setIsMenuOpen(false);
+                          closeMenu();
                         }}
                         className="justify-start"
                       >
@@ -180,7 +222,22 @@ export const Header = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </header>
+        </div>
+      </header>
+      
+      {/* Mobile Menu Backdrop - Outside header for proper z-index */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeMenu}
+            className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            style={{ top: '64px' }}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 };

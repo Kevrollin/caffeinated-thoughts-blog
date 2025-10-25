@@ -15,6 +15,12 @@ import { Badge } from '@/components/ui/badge';
 import { apiClient } from '@/lib/api';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
+import { markdownComponents } from '@/lib/markdown';
+import 'highlight.js/styles/github-dark.css';
 
 interface Thread {
   id: string;
@@ -31,6 +37,7 @@ interface Thread {
     id: string;
     title: string;
     slug: string;
+    contentMarkdown?: string;
     excerpt?: string;
     featuredImageUrl?: string;
     orderInThread: number;
@@ -136,94 +143,85 @@ const ThreadDetail = () => {
           </div>
         </div>
 
-        {/* Thread Posts */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-heading font-bold text-coffee">
-            Posts in this Thread
+        {/* Thread Posts - Twitter Style */}
+        <div className="space-y-1">
+          <h2 className="text-2xl font-heading font-bold text-coffee mb-6">
+            Read Along
           </h2>
           
-          <div className="space-y-6">
+          <div className="space-y-0">
             {thread.posts.map((post, index) => (
               <motion.div
                 key={post.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="relative"
               >
-                <Card className="hover:shadow-lg transition-shadow">
+                {/* Connecting line (except last post) */}
+                {index < thread.posts.length - 1 && (
+                  <div className="absolute left-6 top-16 bottom-0 w-0.5 bg-border" />
+                )}
+                
+                <Card className="hover:shadow-lg transition-all hover:bg-accent/50 border-l-4 border-coffee/20 hover:border-coffee">
                   <CardHeader>
-                    <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-4">
+                      {/* Thread number badge */}
+                      <div className="flex-shrink-0">
+                        <Badge className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold bg-coffee text-white">
+                          {post.orderInThread}
+                        </Badge>
+                      </div>
+                      
                       <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <Badge variant="outline">
-                            Part {post.orderInThread}
-                          </Badge>
-                          <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2 mb-2">
+                          <CardTitle className="text-2xl font-heading text-coffee">
+                            {post.title}
+                          </CardTitle>
+                        </div>
+                        
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                          <div className="flex items-center gap-1">
                             <Clock className="h-4 w-4" />
                             <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
                           </div>
+                          <span>•</span>
+                          <span>Part {post.orderInThread} of {thread.posts.length}</span>
                         </div>
-                        <CardTitle className="text-xl font-heading text-coffee">
-                          {post.title}
-                        </CardTitle>
-                        {post.excerpt && (
-                          <CardDescription className="mt-2">
-                            {post.excerpt}
-                          </CardDescription>
-                        )}
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent>
+                  
+                  <CardContent className="pl-20 pr-6">
                     {post.featuredImageUrl && (
                       <div className="mb-4">
                         <img
                           src={post.featuredImageUrl}
                           alt={post.title}
-                          className="w-full h-48 object-cover rounded-lg"
+                          className="w-full h-64 object-cover rounded-lg"
                         />
                       </div>
                     )}
                     
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                        <div className="flex items-center space-x-1">
-                          <FileText className="h-4 w-4" />
-                          <span>Post {post.orderInThread} of {thread.posts.length}</span>
-                        </div>
+                    {post.excerpt && !post.contentMarkdown && (
+                      <p className="text-lg text-muted-foreground mb-4">{post.excerpt}</p>
+                    )}
+                    
+                    {post.contentMarkdown && (
+                      <div className="prose prose-coffee dark:prose-invert max-w-none">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeHighlight, rehypeRaw]}
+                          components={markdownComponents}
+                        >
+                          {post.contentMarkdown}
+                        </ReactMarkdown>
                       </div>
-                      
-                      <Link to={`/post/${post.slug}`}>
-                        <Button variant="outline" size="sm">
-                          Read Post
-                        </Button>
-                      </Link>
-                    </div>
+                    )}
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
-          </div>
-        </div>
-
-        {/* Thread Navigation */}
-        <div className="border-t pt-8">
-          <div className="text-center">
-            <h3 className="text-lg font-semibold text-coffee mb-4">
-              Continue Reading
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              This thread contains {thread.posts.length} posts. Start from the beginning or jump to any post.
-            </p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {thread.posts.map((post, index) => (
-                <Link key={post.id} to={`/post/${post.slug}`}>
-                  <Button variant="outline" size="sm">
-                    Part {post.orderInThread}
-                  </Button>
-                </Link>
-              ))}
-            </div>
           </div>
         </div>
       </motion.div>

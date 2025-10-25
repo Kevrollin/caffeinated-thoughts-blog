@@ -164,13 +164,13 @@ const PostDetail = () => {
             </div>
 
             {/* Buy Coffee CTA */}
-            <div className="mt-12 p-6 rounded-lg border-2 border-emerald/30 bg-emerald/5">
-              <div className="flex items-center justify-between">
+            <div className="mt-12 p-2 rounded-sm border-2 border-emerald/30 bg-emerald/5">
+              <div className="flex flex-col items-center justify-between">
                 <div>
-                  <h3 className="font-heading text-xl font-bold mb-2 flex items-center">
+                  {/*<h3 className="font-heading text-sm font-bold mb-2 flex items-center">
                     <Coffee className="h-5 w-5 mr-2 text-emerald" />
                     Enjoyed this post?
-                  </h3>
+                  </h3> */}
                   <p className="text-sm text-muted-foreground">
                     Support my work with a virtual coffee!
                   </p>
@@ -197,9 +197,9 @@ const PostDetail = () => {
           <Button
             onClick={() => setIsCoffeeModalOpen(true)}
             size="lg"
-            className="rounded-full h-14 w-14 shadow-coffee-xl bg-emerald hover:bg-emerald/90"
+            className="rounded-xl h-14 w-14 shadow-coffee-xl bg-emerald hover:bg-emerald/90"
           >
-            <Coffee className="h-6 w-6" />
+            <Coffee className="h-8 w-8" />
           </Button>
         </motion.div>
       </article>
