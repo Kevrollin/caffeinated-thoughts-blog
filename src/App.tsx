@@ -23,6 +23,7 @@ import NewPost from "./pages/admin/NewPost";
 import EditPost from "./pages/admin/EditPost";
 import ThreadsList from "./pages/admin/ThreadsList";
 import NewThread from "./pages/admin/NewThread";
+import EditThread from "./pages/admin/EditThread";
 import ThreadPosts from "./pages/admin/ThreadPosts";
 import NewThreadPost from "./pages/admin/NewThreadPost";
 import Transactions from "./pages/admin/Transactions";
@@ -67,6 +68,7 @@ const App = () => (
                 <Route path="posts/:id/edit" element={<EditPost />} />
                 <Route path="threads" element={<ThreadsList />} />
                 <Route path="threads/new" element={<NewThread />} />
+                <Route path="threads/:id/edit" element={<EditThread />} />
                 <Route path="threads/:id/posts" element={<ThreadPosts />} />
                 <Route path="threads/:id/posts/new" element={<NewThreadPost />} />
                 <Route path="transactions" element={<Transactions />} />
