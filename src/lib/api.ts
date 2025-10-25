@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // API URL configuration - supports both local and production
 export const API_BASE_URL = import.meta.env.VITE_API_URL 
-  ? `${import.meta.env.VITE_API_URL}/api/v1`
+  ? import.meta.env.VITE_API_URL
   : 'https://caffeinated-thoughts-backend.vercel.app/api/v1';
 
 export const apiClient = axios.create({
