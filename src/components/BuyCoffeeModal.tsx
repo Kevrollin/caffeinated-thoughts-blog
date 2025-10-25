@@ -327,7 +327,7 @@ export const BuyCoffeeModal = ({ isOpen, onClose, postId }: BuyCoffeeModalProps)
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Coffee className="h-5 w-5 text-emerald" />
-            <span>Buy Me a Coffee</span>
+            <span>Thank you for sharing</span>
           </DialogTitle>
           <DialogDescription>
             Support my work with a virtual coffee! ☕
